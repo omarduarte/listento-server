@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
 
@@ -11,13 +12,14 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
 
 jar {
-    baseName = 'listento'
+    baseName = 'listento-server'
     version = '0.0.1'
 }
 
-group = 'com.listento'
+group = 'omarduarte'
 version = '0.0.1'
 
 description = """listento"""
@@ -39,5 +41,17 @@ dependencies {
     runtime group: 'org.springframework.boot', name: 'spring-boot-devtools', version:'1.4.3.RELEASE'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.4.3.RELEASE') {
         exclude(module: 'commons-logging')
+    }
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    applicationName = jar.baseName
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
     }
 }

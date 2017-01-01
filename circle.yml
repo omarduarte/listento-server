@@ -1,0 +1,14 @@
+machine:
+  java:
+    version: oraclejdk8
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - sh gradlew build buildDocker
+
+test:
+  override:
+    - sh gradlew build test
