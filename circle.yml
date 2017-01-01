@@ -7,7 +7,7 @@ machine:
 dependencies:
   override:
     - docker info
-    - sudo add-apt-repository ppa:cwchien/gradle
+    - sudo add-apt-repository ppa:cwchien/gradle -y
     - sudo apt-get update
     - sudo apt-get install gradle
     - gradle buildDocker
